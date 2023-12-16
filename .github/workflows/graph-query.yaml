@@ -2,7 +2,7 @@ name: Query
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/30 * * * *"
 
 jobs:
   process-changes:
@@ -36,7 +36,7 @@ jobs:
             --query-file ./queries/generate.rq \
             --number-of-concurrent-requests 10 \
             --wait-between-requests 100 \
-            --batch-size 1000
+            --batch-size 10000
       - name: Save changes
         run: |
           cd ./data

@@ -33,7 +33,7 @@ jobs:
             --endpoint-url "https://api.colonial-heritage.triply.cc/datasets/data-hub/knowledge-graph/services/kg/sparql" \
             --query-file ./queries/iterate.rq \
             --number-of-iris-per-request 10000 \
-            --wait-between-requests 500 \
+            --wait-between-requests 400 \
             --resource-dir ./resources \
             --queue-file ./queue/data.sqlite
       - name: Save changes
