@@ -1,0 +1,46 @@
+name: Init
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  process-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout data repository
+        uses: actions/checkout@v4
+        with:
+          path: ./data
+      - name: Checkout code repository
+        uses: actions/checkout@v4
+        with:
+          path: ./code
+          repository: sdevalk/cc-integration-v2
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install and build packages
+        run: |
+          cd ./code
+          npm ci
+          npx turbo run build --filter=@colonial-collections/graph-init
+      - name: Collect and queue IRIs from a SPARQL endpoint
+        run: |
+          cd ./data
+          ../code/apps/graph-init/dist/cli.js run \
+            --endpoint-url "https://api.colonial-heritage.triply.cc/datasets/data-hub/knowledge-graph/services/kg/sparql" \
+            --query-file ./queries/iterate.rq \
+            --number-of-iris-per-request 1000 \
+            --wait-between-requests 500 \
+            --resource-dir ./resources \
+            --queue-file ./queue/data.sqlite
+      - name: Save changes
+        run: |
+          cd ./data
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit --quiet -a -m "Save changes" || true
+          git push --force -u origin
