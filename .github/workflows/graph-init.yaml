@@ -32,7 +32,7 @@ jobs:
           ../code/apps/graph-init/dist/cli.js run \
             --endpoint-url "https://api.colonial-heritage.triply.cc/datasets/data-hub/knowledge-graph/services/kg/sparql" \
             --query-file ./queries/iterate.rq \
-            --number-of-iris-per-request 1000 \
+            --number-of-iris-per-request 10000 \
             --wait-between-requests 500 \
             --resource-dir ./resources \
             --queue-file ./queue/data.sqlite
