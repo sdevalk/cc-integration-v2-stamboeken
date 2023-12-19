@@ -1,8 +1,8 @@
 name: Query
 
 on:
-  push:
-    branches: ["main"]
+  schedule:
+    - cron: "0 * * * *"
 
 jobs:
   run:
@@ -38,7 +38,7 @@ jobs:
             --query-file ./queries/generate.rq \
             --number-of-concurrent-requests 20 \
             --wait-between-requests 100 \
-            --batch-size 50000 \
+            --batch-size 100000 \
             --triplydb-instance-url "${{ vars.TRIPLYDB_INSTANCE_URL }}" \
             --triplydb-api-token "${{ secrets.TRIPLYDB_API_TOKEN }}" \
             --triplydb-account "${{ vars.TRIPLYDB_ACCOUNT }}" \
