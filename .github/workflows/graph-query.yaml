@@ -1,11 +1,11 @@
 name: Query
 
 on:
-  schedule:
-    - cron: "*/30 * * * *"
+  push:
+    branches: ["main"]
 
 jobs:
-  process-changes:
+  run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout data repository
@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Install and build packages
+      - name: Install app
         run: |
           cd ./code
           npm ci
@@ -29,17 +29,29 @@ jobs:
       - name: Create or update a graph by querying a SPARQL endpoint
         run: |
           cd ./data
-          ../code/apps/graph-query/dist/cli.js query \
+          mkdir -p "$RUNNER_TEMP"
+          test -f ./queue/data.tar.gz && tar -xzf ./queue/data.tar.gz -C "$RUNNER_TEMP"
+          ../code/apps/graph-query/dist/cli.js run \
             --resource-dir ./resources \
-            --queue-file ./queue/data.sqlite \
+            --queue-file "$RUNNER_TEMP/data.sqlite" \
             --endpoint-url "https://api.colonial-heritage.triply.cc/datasets/data-hub/knowledge-graph/services/kg/sparql" \
             --query-file ./queries/generate.rq \
-            --number-of-concurrent-requests 10 \
+            --number-of-concurrent-requests 20 \
             --wait-between-requests 100 \
-            --batch-size 10000
+            --batch-size 50000 \
+            --triplydb-instance-url "${{ vars.TRIPLYDB_INSTANCE_URL }}" \
+            --triplydb-api-token "${{ secrets.TRIPLYDB_API_TOKEN }}" \
+            --triplydb-account "${{ vars.TRIPLYDB_ACCOUNT }}" \
+            --triplydb-dataset "${{ vars.TRIPLYDB_DATASET_SG }}" \
+            --triplydb-service-name "search" \
+            --triplydb-service-type "elasticsearch" \
+            --graph-name "https://data.colonialcollections.nl/bronbeek-stamboeken" \
+            --dir-temp "$RUNNER_TEMP"
       - name: Save changes
         run: |
           cd ./data
+          mkdir -p ./queue
+          test -f "$RUNNER_TEMP/data.sqlite" && tar -czf ./queue/data.tar.gz -C "$RUNNER_TEMP" data.sqlite
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
