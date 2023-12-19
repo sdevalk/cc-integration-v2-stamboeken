@@ -1,5 +1,5 @@
 ###############################
-# Query for generating a search graph from person descriptions in dataset 'Stamboeken'
+# Query for generating a search graph from dataset 'Stamboeken'
 ###############################
 
 PREFIX cc: <https://colonialcollections.nl/schema#> # Internal ontology
