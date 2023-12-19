@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: "0 * * * *"
 
+# Run a single workflow at a time
+concurrency:
+  group: ${{ github.workflow }}
+
 jobs:
   run:
     runs-on: ubuntu-latest
