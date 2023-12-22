@@ -1,8 +1,12 @@
 name: Create graph
 
 on:
-  push:
-    branches: ["main"]
+  schedule:
+    - cron: "0 * * * *"
+
+# Run a single workflow at a time
+concurrency:
+  group: ${{ github.workflow }}
 
 jobs:
   run:
@@ -36,12 +40,7 @@ jobs:
             --queue-file "$RUNNER_TEMP/data.sqlite" \
             --endpoint-url "https://api.colonialcollections.nl/datasets/data-hub/knowledge-graph/services/kg/sparql" \
             --iterate-query-file ./queries/iterate.rq \
-            --iterate-wait-between-requests 500 \
-            --iterate-number-of-iris-per-request 10000 \
             --generate-query-file ./queries/generate.rq \
-            --generate-wait-between-requests 101 \
-            --generate-number-of-concurrent-requests 20 \
-            --generate-batch-size 50000 \
             --triplydb-instance-url "${{ vars.TRIPLYDB_INSTANCE_URL }}" \
             --triplydb-api-token "${{ secrets.TRIPLYDB_API_TOKEN }}" \
             --triplydb-account "${{ vars.TRIPLYDB_ACCOUNT }}" \
