@@ -88,7 +88,9 @@ WHERE {
   # Part of dataset
   ####################
 
-  ?this schema:isPartOf ?dataset .
+  # FIXME: dataset is not correct
+  BIND(<https://data.colonialcollections.nl/Bronbeek/Stamboeken> AS ?dataset)
+  # ?this schema:isPartOf ?dataset .
 
   OPTIONAL {
     ?dataset schema:name ?datasetName

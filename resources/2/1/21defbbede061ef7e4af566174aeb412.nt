@@ -1,4 +1,0 @@
-<https://colonial-heritage.triply.cc/bronbeek/stamboeken/id/people/ddbcc2c85d58cd277ad295382e15c9bc> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://colonialcollections.nl/schema#Person> .
-<https://colonial-heritage.triply.cc/bronbeek/stamboeken/id/people/ddbcc2c85d58cd277ad295382e15c9bc> <https://colonialcollections.nl/schema#name> "Karta bin Saiïn" .
-<https://colonial-heritage.triply.cc/bronbeek/stamboeken/id/people/ddbcc2c85d58cd277ad295382e15c9bc> <https://colonialcollections.nl/schema#birthDate> "1931"^^<http://www.w3.org/2001/XMLSchema#gYear> .
-<https://colonial-heritage.triply.cc/bronbeek/stamboeken/id/people/ddbcc2c85d58cd277ad295382e15c9bc> <https://colonialcollections.nl/schema#birthYear> "1931"^^<http://www.w3.org/2001/XMLSchema#integer> .
