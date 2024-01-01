@@ -1,8 +1,12 @@
 name: Create graph
 
+# on:
+#   schedule:
+#     - cron: "0 * * * *"
+
 on:
-  schedule:
-    - cron: "0 * * * *"
+  push:
+    branches: ["main"]
 
 # Run a single workflow at a time
 concurrency:
@@ -39,6 +43,7 @@ jobs:
             --resource-dir ./resources \
             --data-file "$RUNNER_TEMP/data.sqlite" \
             --endpoint-url "https://api.colonialcollections.nl/datasets/data-hub/knowledge-graph/services/kg/sparql" \
+            --check-if-run-must-continue-query-file ./queries/check.rq \
             --iterate-query-file ./queries/iterate.rq \
             --generate-query-file ./queries/generate.rq \
             --triplydb-instance-url "${{ vars.TRIPLYDB_INSTANCE_URL }}" \
